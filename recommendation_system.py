@@ -55,10 +55,10 @@ class recommendation_system:
                 else:
                     if team == 100 or team == 'blue':
                         self.champs_t100.append(champ)
-                        self.champs_t100_nums.append(champ2num[champ])
+                        self.champs_t100_nums.append(self.champ2num[champ])
                     elif team == 200 or team == 'purple':
                         self.champs_t200.append(champ)
-                        self.champs_t200_nums.append(champ2num[champ])
+                        self.champs_t200_nums.append(self.champ2num[champ])
                     else:
                         print('Invalid team name!')
             else:
@@ -73,10 +73,10 @@ class recommendation_system:
                     print('Champion with id ' + str(champ) + ' is already in team purple!')
                 else:
                     if team == 100 or team == 'blue':
-                        self.champs_t100.append(num2champ[champ])
+                        self.champs_t100.append(self.num2champ[champ])
                         self.champs_t100_nums.append(champ)
                     elif team == 200 or team == 'purple':
-                        self.champs_t200.append(num2champ[champ])
+                        self.champs_t200.append(self.num2champ[champ])
                         self.champs_t200_nums.append(champ)
                     else:
                         print('Invalid team name!')
