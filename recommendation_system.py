@@ -1,4 +1,5 @@
 import numpy as np
+from itertools import combinations
 
 class recommendation_system:
     def __init__(self, model, synergy, counter, champ2num):
