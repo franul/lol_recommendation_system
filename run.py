@@ -7,7 +7,7 @@ if __name__ == '__main__':
     bans_path = Path(argv[1])
     champion_path = Path(argv[2])
     output_path = Path(argv[3])
-    team_to_recommend = int(Path(argv[4]))
+    team_to_recommend = int(argv[4])
 
 
     if not bans_path.exists():
