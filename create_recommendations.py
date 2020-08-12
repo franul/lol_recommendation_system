@@ -44,7 +44,7 @@ def create_recommendations(bans_path, champion_path, output_path,
     path = os.path.join(data_path, 'logistic_regression_model.sav')
     with open(path, 'rb') as f:
         model = pickle.load(f)
-    recommendation_system = recommendation_system(model, synergy, counter,
+    recom_system = recommendation_system(model, synergy, counter,
                                                   champ2num)
     #loading champion bans and names
     bans = []
@@ -56,7 +56,7 @@ def create_recommendations(bans_path, champion_path, output_path,
                 ban = int(ban)
             except:
                 pass
-            bans.append()
+            bans.append(ban)
 
     #loading champion bans and names
     champions = []
@@ -80,8 +80,8 @@ def create_recommendations(bans_path, champion_path, output_path,
             teams.append(team)
 
         #adding bans and champions to recommmendation object
-        recommendation_system.add_bans(bans)
-        recommendation_system.add_champs(champions, teams)
-        rec_dict = recommendation_system.recommend_champ(team_to_recommend=team_to_recommend)
+        recom_system.add_bans(bans)
+        recom_system.add_champs(champions, teams)
+        rec_dict = recom_system.recommend_champ(team_to_recommend=team_to_recommend)
         pos_picks = [(k,v) for k, v in rec_dict.items()  if v >= 0.5]
         return rec_dict, pos_picks
