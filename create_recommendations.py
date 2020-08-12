@@ -12,7 +12,8 @@ from recommendation_system import recommendation_system
 def create_recommendations(bans_path, champion_path, output_path,
                            team_to_recommend):
     #loading champion info
-    data_path = os.path.join(os.path.dirname(os.path.abspath(os.getcwd())), 'data')
+    # data_path = os.path.join(os.path.dirname(os.path.abspath(os.getcwd())), 'data')
+    data_path = os.path.join(os.path.abspath(os.getcwd()), 'data')
     path = os.path.join(data_path, 'champion.json')
     with open(path, 'r') as f:
         champions = json.load(f)
