@@ -1,0 +1,10 @@
+Maokai: 0.783732
+RekSai: 0.778593
+Jax: 0.760114
+Nidalee: 0.720809
+Lucian: 0.601575
+Tristana: 0.586471
+Jayce: 0.564183
+Evelynn: 0.555829
+Gragas: 0.502912
+Yasuo: 0.502419
