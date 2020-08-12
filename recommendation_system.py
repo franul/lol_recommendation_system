@@ -28,7 +28,7 @@ class recommendation_system:
                     print('Champion ' + champ + ' is already in ban list!')
                 else:
                     self.bans_champs.append(champ)
-                    self.bans_champs_nums.append(champ2num[champ])
+                    self.bans_champs_nums.append(self.champ2num[champ])
             else:
                 print('There is no champion with name ' + champ + '!')
         elif type(champ) == int:
@@ -36,7 +36,7 @@ class recommendation_system:
                 if champ in self.bans_champs_nums:
                     print('Champion with id' + str(champ) + ' is already in ban list!')
                 else:
-                    self.bans_champs.append(num2champ(champ))
+                    self.bans_champs.append(self.num2champ[champ])
                     self.bans_champs_nums.append(champ)
             else:
                 print('There is no champion with id ' + champ + '!')
