@@ -26,4 +26,4 @@ if __name__ == '__main__':
     recom_path = output_path / 'recommendations.txt'
     with open(recom_path, 'w') as f:
         for item in pos_picks:
-            f.write('%s: %f\n' % item[0], item[1])
+            f.write('%s: %f\n' % (item[0], item[1]))
