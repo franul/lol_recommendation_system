@@ -1,4 +1,4 @@
-
+import numpy as np
 
 class recommendation_system:
     def __init__(self, model, synergy, counter, champ2num):
@@ -6,7 +6,7 @@ class recommendation_system:
         self.synergy = synergy
         self.counter = counter
         self.champ2num = champ2num
-        self.num2champ = {v: k for k, v in champ2num.items()}        
+        self.num2champ = {v: k for k, v in champ2num.items()}
         self.champ_list = champ2num.keys()
         self.champ_list_nums = champ2num.values()
         self.num_champs = len(champ2num)
