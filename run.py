@@ -2,6 +2,7 @@
 
 from pathlib import Path
 from sys import argv, stderr
+from create_recommendations import create_recommendations
 
 if __name__ == '__main__':
     bans_path = Path(argv[1])
