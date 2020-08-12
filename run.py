@@ -25,5 +25,5 @@ if __name__ == '__main__':
                                                  output_path, team_to_recommend)
     recom_path = output_path / 'recommendations.txt'
     with open(recom_path, 'w') as f:
-        for key, value in pos_picks.items():
-            f.write('%s: %f\n' % key, value)
+        for item in pos_picks:
+            f.write('%s: %f\n' % item[0], item[1])
