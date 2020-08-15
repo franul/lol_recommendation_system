@@ -3,7 +3,7 @@
 import numpy as np
 from itertools import combinations
 
-class recommendation_system:
+class Recommendation_System:
     def __init__(self, model, synergy, counter, champ2num):
         self.model = model
         self.synergy = synergy

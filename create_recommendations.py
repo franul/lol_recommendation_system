@@ -6,7 +6,7 @@ import os
 import numpy as np
 import pickle
 
-from recommendation_system import recommendation_system
+from recommendation_system import Recommendation_System
 
 
 def create_recommendations(bans_path, champion_path, output_path,
@@ -44,7 +44,7 @@ def create_recommendations(bans_path, champion_path, output_path,
     path = os.path.join(data_path, 'logistic_regression_model.sav')
     with open(path, 'rb') as f:
         model = pickle.load(f)
-    recom_system = recommendation_system(model, synergy, counter,
+    recom_system = Recommendation_System(model, synergy, counter,
                                                   champ2num)
     #loading champion bans and names
     bans = []
