@@ -14,7 +14,6 @@ queue = "RANKED_SOLO_5x5"
 class Riot_Crawler():
     def __init__(self, api_key, regions, queue, matchlist_page_limit=100):
         self.api_key = api_key
-        self.regions = regions
         self.queue = queue
         self.matchlist_page_limit = matchlist_page_limit
         self.api = LolWatcher(api_key)
@@ -27,7 +26,7 @@ class Riot_Crawler():
         return league_dict
 
     def fetch_acc_ids(self, calls_num=10, period_num=12, region, league_dict,
-                      save=False, destination_path=None)
+                      save=False, destination_path=None):
         summoner_ids = []
         accounts = []
         account_ids = []
@@ -87,7 +86,7 @@ class Riot_Crawler():
                 account_ids.append(line.strip())
         return summoner_ids, accounts, account_ids
 
-    def fetch_match_ids(self, calls_num=10, period_num=12, region, queue,
+    def fetch_match_ids(self, calls_num=10, period_num=12, region,
                         account_ids, begin_time, end_time, save=False,
                         destination_path=None):
         @sleep_and_retry
@@ -98,7 +97,7 @@ class Riot_Crawler():
                                                            encrypted_account_id=account_id,
                                                            begin_time=begin_time,
                                                            end_time=end_time,
-                                                           queue=queue_id,
+                                                           queue=queue,
                                                            begin_index=begin_index,
                                                            end_index=end_index)
             return new_matchlist
@@ -117,7 +116,7 @@ class Riot_Crawler():
                                                   account_id=account_id,
                                                   begin_time=begin_time,
                                                   end_time=end_time,
-                                                  queue=queue_id,
+                                                  queue=self.queue,
                                                   begin_index=begin_index,
                                                   end_index=begin_index+self.matchlist_page_limit)
                 except:
@@ -140,21 +139,82 @@ class Riot_Crawler():
             else:
                 if not os.path.exists(destination_path):
                     os.makedirs(destination_path)
-                path = os.path.join(folder_path, 'match_ids.txt')
+                path = os.path.join(destination_path, 'match_ids.txt')
                 with open(path, 'w') as f:
                     for item in match_ids:
                         f.write("%s\n" % item)
         return match_ids, account_ids_done
 
-    def load_acc_ids(self, load_path):
-        path = os.path.join(folder_path, 'match_ids.txt')
+    def load_match_ids(self, load_path):
+        path = os.path.join(load_path, 'match_ids.txt')
         match_ids = []
         with open(path) as f:
             for line in f:
                 match_ids.append(line.strip())
+        return match_ids
 
+    def fetch_match_info(self, calls_num=10, period_num=12, region, match_ids,
+                         save=False, destination_path=None):
+        @sleep_and_retry
+        @limits(calls=10, period=12)
+        def get_match_info(region, match_id):
+            match = self.api.match.by_id(region=region, match_id=match_id)
+            return match
 
+        match_id_dones = []
+        match_list = []
+        account_ids_unseen = []
+        for match_id in list(set(match_ids)):
+            if match_id in match_id_dones:
+                continue
+            else:
+                match_id_dones.append(match_id)
+                try:
+                    match = get_match_info(region, match_id)
+                    match_list.append(match)
+                    game_account_ids = [x['player']['currentAccountId'] for x in match['participantIdentities']]
+                    new_account_ids = list(set(game_account_ids) - set(account_ids_done) - set(account_ids_unseen))
+                    account_ids_unseen.extend(new_account_ids)
+                except:
+                    pass
+        if save:
+            if destination_path is None:
+                print('No destination path was given')
+            else:
+                if not os.path.exists(destination_path):
+                    os.makedirs(destination_path)
+                path = os.path.join(destination_path, 'match_id_dones.txt')
+                with open(path, 'w') as f:
+                    for item in match_id_dones:
+                        f.write("%s\n" % item)
 
+                path = os.path.join(destination_path, 'match_list.json')
+                with open(path, 'w') as f:
+                    json.dump(match_list, f, indent=4)
+
+                path = os.path.join(destination_path, 'account_ids_unseen.txt')
+                with open(path, 'w') as f:
+                    for item in account_ids_unseen:
+                        f.write("%s\n" % item)
+        return match_list, match_id_dones, account_ids_unseen
+
+    def load_match_ids(self, load_path):
+        path = os.path.join(folder_path, 'match_id_dones.txt')
+        match_id_dones = []
+        with open(path) as f:
+            for line in f:
+                match_id_dones.append(line.strip())
+
+        path = os.path.join(folder_path, 'match_list.json')
+        with open(path, 'r') as f:
+            match_list = json.load(f)
+
+        path = os.path.join(folder_path, 'account_ids_unseen.txt')
+        account_ids_unseen = []
+        with open(path) as f:
+            for line in f:
+                account_ids_unseen.append(line.strip())
+        return match_list, match_id_dones, account_ids_unseen
 if save:
     if destination_path is None:
         print('No destination path was given')
