@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 from riotwatcher import LolWatcher, ApiError, RiotWatcher
 from datetime import date, timedelta, datetime
 from ratelimit import limits, sleep_and_retry
@@ -12,7 +14,7 @@ queue = "RANKED_SOLO_5x5"
 
 
 class Riot_Crawler():
-    def __init__(self, api_key, regions, queue, matchlist_page_limit=100):
+    def __init__(self, api_key, queue, matchlist_page_limit=100):
         self.api_key = api_key
         self.queue = queue
         self.matchlist_page_limit = matchlist_page_limit
@@ -25,7 +27,7 @@ class Riot_Crawler():
         league_dict['masters'] = self.api.league.masters_by_queue(region=region, queue=queue)
         return league_dict
 
-    def fetch_acc_ids(self, calls_num=10, period_num=12, region, league_dict,
+    def fetch_acc_ids(self, region, league_dict, calls_num=10, period_num=12,
                       save=False, destination_path=None):
         summoner_ids = []
         accounts = []
@@ -86,8 +88,8 @@ class Riot_Crawler():
                 account_ids.append(line.strip())
         return summoner_ids, accounts, account_ids
 
-    def fetch_match_ids(self, calls_num=10, period_num=12, region,
-                        account_ids, begin_time, end_time, save=False,
+    def fetch_match_ids(self, region, account_ids, begin_time, end_time,
+                        calls_num=10, period_num=12, save=False,
                         destination_path=None):
         @sleep_and_retry
         @limits(calls=calls_num, period=period_num)
@@ -153,7 +155,7 @@ class Riot_Crawler():
                 match_ids.append(line.strip())
         return match_ids
 
-    def fetch_match_info(self, calls_num=10, period_num=12, region, match_ids,
+    def fetch_match_info(self, region, match_ids, calls_num=10, period_num=12,
                          save=False, destination_path=None):
         @sleep_and_retry
         @limits(calls=10, period=12)
@@ -215,10 +217,3 @@ class Riot_Crawler():
             for line in f:
                 account_ids_unseen.append(line.strip())
         return match_list, match_id_dones, account_ids_unseen
-if save:
-    if destination_path is None:
-        print('No destination path was given')
-    else:
-        if not os.path.exists(destination_path):
-            os.makedirs(destination_path)
-        path = os.path.join(destination_path, 'league.txt')
