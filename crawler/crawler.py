@@ -12,10 +12,11 @@ queue = "RANKED_SOLO_5x5"
 
 
 class Riot_Crawler():
-    def __init__(self, api_key, regions, queue):
+    def __init__(self, api_key, regions, queue, matchlist_page_limit=100):
         self.api_key = api_key
         self.regions = regions
         self.queue = queue
+        self.matchlist_page_limit = matchlist_page_limit
         self.api = LolWatcher(api_key)
 
     def fetch_league(self, region, queue, save=False, destination_path=None):
@@ -85,6 +86,67 @@ class Riot_Crawler():
             for line in f:
                 account_ids.append(line.strip())
         return summoner_ids, accounts, account_ids
+
+    def fetch_match_ids(self, calls_num=10, period_num=12, region, queue,
+                        account_ids, begin_time, end_time, save=False,
+                        destination_path=None):
+        @sleep_and_retry
+        @limits(calls=calls_num, period=period_num)
+        def get_matchlist(region, account_id, begin_time, end_time, queue,
+                          begin_index, end_index):
+            new_matchlist = api.match.matchlist_by_account(region=region,
+                                                           encrypted_account_id=account_id,
+                                                           begin_time=begin_time,
+                                                           end_time=end_time,
+                                                           queue=queue_id,
+                                                           begin_index=begin_index,
+                                                           end_index=end_index)
+            return new_matchlist
+
+        account_ids_done = []
+        match_ids = []
+        for account_id in account_ids:
+            # Start with empty matchlist
+            matchlist = {"matches": [], "totalGames": 0}
+            begin_index = 0
+            more_matches=True
+            while more_matches:
+                new_matchlist = {}
+                try:
+                    new_matchlist = get_matchlist(region=region,
+                                                  account_id=account_id,
+                                                  begin_time=begin_time,
+                                                  end_time=end_time,
+                                                  queue=queue_id,
+                                                  begin_index=begin_index,
+                                                  end_index=begin_index+self.matchlist_page_limit)
+                except:
+                    pass
+                if "matches" in new_matchlist.keys():
+                    matchlist["matches"] = matchlist["matches"] + new_matchlist["matches"]
+                    matchlist["totalGames"] = matchlist["totalGames"] + new_matchlist["totalGames"]
+                    if len(new_matchlist["matches"]) == MATCHLIST_PAGE_LIMIT:
+                        begin_index += MATCHLIST_PAGE_LIMIT
+                    else:
+                        more_matches=False
+                else:
+                    more_matches=False
+            account_ids_done.append(account_id)
+            new_match_ids = list(set([x['gameId'] for x in matchlist['matches']]) - set(match_ids))
+            match_ids.extend(new_match_ids)
+        if save:
+            if destination_path is None:
+                print('No destination path was given')
+            else:
+                if not os.path.exists(destination_path):
+                    os.makedirs(destination_path)
+                path = os.path.join(folder_path, 'match_ids.txt')
+                with open(path, 'w') as f:
+                    for item in match_ids:
+                        f.write("%s\n" % item)
+
+
+        return match_ids, account_ids_done
 
 
 
