@@ -144,9 +144,14 @@ class Riot_Crawler():
                 with open(path, 'w') as f:
                     for item in match_ids:
                         f.write("%s\n" % item)
-
-
         return match_ids, account_ids_done
+
+    def load_acc_ids(self, load_path):
+        path = os.path.join(folder_path, 'match_ids.txt')
+        match_ids = []
+        with open(path) as f:
+            for line in f:
+                match_ids.append(line.strip())
 
 
 
