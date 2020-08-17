@@ -14,5 +14,5 @@ if __name__ == '__main__':
     end_time = int(datetime.today().timestamp()) * 1000
     league_dict = riot_crawler.fetch_league(region)
     summoner_ids, accounts, account_ids = riot_crawler.fetch_acc_ids(region, league_dict)
-    match_ids, account_ids_done = riot_crawler.fetch_match_ids(region, account_ids[:2], begin_time, end_time)
-    match_list, match_id_dones, account_ids_unseen = riot_crawler.fetch_match_info(region, match_ids[:20])
+    match_ids, account_ids_done = riot_crawler.fetch_match_ids(region, account_ids, begin_time, end_time)
+    match_list, match_id_dones, account_ids_unseen = riot_crawler.fetch_match_info(region, match_ids)
