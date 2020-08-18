@@ -72,21 +72,27 @@ class Riot_Crawler():
 
     #loading summoner_ids, accounts, account_ids from folder path
     def load_acc_ids(self, load_path):
+        if not os.path.exists(load_path):
+            print('Path does not exist.')
+            return None, None
         path = os.path.join(load_path, 'summoner_ids.txt')
         summoner_ids = []
-        with open(path) as f:
-            for line in f:
-                summoner_ids.append(line.strip())
+        if os.path.exists(path):
+            with open(path) as f:
+                for line in f:
+                    summoner_ids.append(line.strip())
 
         path = os.path.join(load_path, 'accounts.json')
-        with open(path, 'r') as f:
-            accounts = json.load(f)
+        if os.path.exists(path):
+            with open(path, 'r') as f:
+                accounts = json.load(f)
 
         path = os.path.join(load_path, 'account_ids.txt')
         account_ids = []
-        with open(path) as f:
-            for line in f:
-                account_ids.append(line.strip())
+        if os.path.exists(path):
+            with open(path) as f:
+                for line in f:
+                    account_ids.append(line.strip())
         return summoner_ids, accounts, account_ids
 
     def fetch_match_ids(self, region, account_ids, begin_time, end_time,
@@ -154,17 +160,22 @@ class Riot_Crawler():
         return match_ids, account_ids_done
 
     def load_match_ids(self, load_path):
+        if not os.path.exists(load_path):
+            print('Path does not exist.')
+            return None, None
         path = os.path.join(load_path, 'match_ids.txt')
         match_ids = []
-        with open(path) as f:
-            for line in f:
-                match_ids.append(line.strip())
+        if os.path.exists(path):
+            with open(path) as f:
+                for line in f:
+                    match_ids.append(line.strip())
         path = os.path.join(load_path, 'account_ids_done.txt')
-        # account_ids_done = []
-        # with open(path) as f:
-        #     for line in f:
-        #         account_ids_done.append(line.strip())
-        return match_ids
+        account_ids_done = []
+        if os.path.exists(path):
+            with open(path) as f:
+                for line in f:
+                    account_ids_done.append(line.strip())
+        return match_ids, account_ids_done
 
     def fetch_match_info(self, region, match_ids, account_ids_done,
                          calls_num=10, period_num=12,
@@ -213,21 +224,27 @@ class Riot_Crawler():
         return match_list, match_id_dones, account_ids_unseen
 
     def load_match_info(self, load_path):
+        if not os.path.exists(load_path):
+            print('Path does not exist.')
+            return None, None, None
         path = os.path.join(load_path, 'match_id_dones.txt')
         match_id_dones = []
-        with open(path) as f:
-            for line in f:
-                match_id_dones.append(line.strip())
+        if os.path.exists(path):
+            with open(path) as f:
+                for line in f:
+                    match_id_dones.append(line.strip())
 
         path = os.path.join(load_path, 'match_list.json')
-        with open(path, 'r') as f:
-            match_list = json.load(f)
+        if os.path.exists(path):
+            with open(path, 'r') as f:
+                match_list = json.load(f)
 
         path = os.path.join(load_path, 'account_ids_unseen.txt')
         account_ids_unseen = []
-        with open(path) as f:
-            for line in f:
-                account_ids_unseen.append(line.strip())
+        if os.path.exists(path):
+            with open(path) as f:
+                for line in f:
+                    account_ids_unseen.append(line.strip())
         return match_list, match_id_dones, account_ids_unseen
 
     def create_features(self, match_list, id2number):

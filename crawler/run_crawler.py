@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 from datetime import date, timedelta, datetime
-
 from crawler import Riot_Crawler
 
 if __name__ == '__main__':
