@@ -229,3 +229,78 @@ class Riot_Crawler():
             for line in f:
                 account_ids_unseen.append(line.strip())
         return match_list, match_id_dones, account_ids_unseen
+
+    def create_features(self, match_list, id2number):
+        num_champions = len(id2number)
+        synergy_matrix = np.zeros((num_champions, num_champions))
+        synergy_matrix_num = np.zeros((num_champions, num_champions))
+        counter_matrix = np.zeros((num_champions, num_champions))
+        counter_matrix_num = np.zeros((num_champions, num_champions))
+        winratio_matrix = np.zeros((num_champions, ))
+        winratio_matrix_num = np.zeros((num_champions, ))
+
+        for match in match_list:
+            #removing matches that don't match constraints
+            duration = match['gameDuration']
+            if duration < 600:
+                continue
+
+            game_type = match['gameType']
+            if game_type != 'MATCHED_GAME':
+                continue
+
+            season = match['seasonId']
+            if season != 13:
+                continue
+
+            game_mode = match['gameMode']
+            if game_mode != 'CLASSIC':
+                continue
+            #creating team dictonary
+            teams = {}
+            teams[100] = []
+            teams[200] = []
+            for team in match['teams']:
+                if team['win'] == 'Win':
+                    teams[str(team['teamId']) + 'score'] = 1
+                else:
+                    teams[str(team['teamId']) + 'score'] = 0
+            for participant in match['participants']:
+                win = participant['stats']['win']
+                champion_id = participant['championId']
+                teamId = participant['teamId']
+                teams[teamId].append(champion_id)
+            #winratio
+            for champion_id1, champion_id2 in zip(teams[100], teams[200]):
+                id1 = id2number[champion_id1]
+                id2 = id2number[champion_id2]
+                winratio_matrix[id1] += teams['100score']
+                winratio_matrix_num[id1] += 1
+                winratio_matrix[id2] += teams['200score']
+                winratio_matrix_num[id2] += 1
+            #winratio for synergy:
+            for champion_id1, champion_id2 in combinations(teams[100], 2):
+                id1 = id2number[champion_id1]
+                id2 = id2number[champion_id2]
+                synergy_matrix[id1, id2] += teams['100score']
+                synergy_matrix_num[id1, id2] += 1
+                synergy_matrix[id2, id1] += teams['100score']
+                synergy_matrix_num[id2, id1] += 1
+            for champion_id1, champion_id2 in combinations(teams[200], 2):
+                id1 = id2number[champion_id1]
+                id2 = id2number[champion_id2]
+                synergy_matrix[id1, id2] += teams['200score']
+                synergy_matrix_num[id1, id2] += 1
+                synergy_matrix[id2, id1] += teams['200score']
+                synergy_matrix_num[id2, id1] += 1
+            #winartio for counterpick:
+            for champion_id1 in teams[100]:
+                id1 = id2number[champion_id1]
+                for champion_id2 in teams[200]:
+                    id2 = id2number[champion_id2]
+                    counter_matrix[id1, id2] += teams['100score']
+                    counter_matrix_num[id1, id2] += 1
+                    counter_matrix[id2, id1] += teams['200score']
+                    counter_matrix_num[id2, id1] += 1
+        return synergy_matrix, synergy_matrix_num, counter_matrix,
+    counter_matrix_num, winratio_matrix, winratio_matrix_num
