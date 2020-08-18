@@ -10,4 +10,4 @@ def load_match_list(region):
         return None
     with open(path, 'r') as f:
         match_list = json.load(f)
-        return match_list   
+        return match_list
