@@ -1,20 +1,12 @@
 from crawler import Riot_Crawler
-
-def load_match_list(region):
-    folder_name = region
-    folder_path = os.path.join(os.getcwd(), folder_name)
-    if not os.path.exists(folder_path):
-        return None
-    path = os.path.join(folder_path, 'match_list.json')
-    if not os.path.exists(path):
-        return None
-    with open(path, 'r') as f:
-        match_list = json.load(f)
-        return match_list
+import os
+import json
+import numpy as np
+from itertools import combinations
 
 if __name__ == '__main__':
     load = True
-    api_key = ''
+    api_key = 'RGAPI-cc723756-6fec-410f-8283-ad41083471b4'
     queue = 'RANKED_SOLO_5x5'
     queue_id = 420
     regions = ['EUN1', 'EUW1', 'NA1', 'KR', 'BR1']
@@ -52,12 +44,8 @@ if __name__ == '__main__':
         folder_path = os.path.join(load_path, region)
         if not os.path.exists(folder_path):
             continue
-        path = os.path.join(folder_path, 'match_list.json')
-        if not os.path.exists(path):
-            continue
-
-        match_list = riot_crawler.load_match_ids(path)
-        syn, syn_num, coun, coun_num, winr, winr_num, matches = riot_crawler.create_features(match_list, id2number)
+        match_list, _, _ = riot_crawler.load_match_info(folder_path)
+        syn, syn_num, coun, coun_num, winr, winr_num, matches = riot_crawler.create_winratio(match_list, id2number)
         synergy_matrix += syn
         synergy_matrix_num += syn_num
         counter_matrix += coun
