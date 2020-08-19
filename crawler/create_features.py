@@ -35,17 +35,6 @@ if __name__ == '__main__':
         id2number[id_num] = i
         number2id[i] = id_num
 
-    #input your path with data after using crawler
-    load_path = 'C:\\Users\\Franul\\Desktop\\tp_projekt'
-    load_paths = []
-    for region in regions:
-        folder_path = os.path.join(load_path, region)
-        if not os.path.exists(folder_path):
-            return None
-        path = os.path.join(folder_path, 'match_list.json')
-        if not os.path.exists(path):
-            return None
-        load_paths.append(path)
     #create synergy, counter winartios and champion winartios
     riot_crawler = Riot_Crawler(api_key, queue, queue_id)
     num_champions = len(id2number)
@@ -55,17 +44,27 @@ if __name__ == '__main__':
     counter_matrix_num = np.zeros((num_champions, num_champions))
     winratio_matrix = np.zeros((num_champions, ))
     winratio_matrix_num = np.zeros((num_champions, ))
+    matches_for_features = []
+    #input your path with data after using crawler
+    load_path = 'C:\\Users\\Franul\\Desktop\\tp_projekt'
 
-    for path in load_paths:
+    for region in regions:
+        folder_path = os.path.join(load_path, region)
+        if not os.path.exists(folder_path):
+            continue
+        path = os.path.join(folder_path, 'match_list.json')
+        if not os.path.exists(path):
+            continue
+
         match_list = riot_crawler.load_match_ids(path)
-        syn, syn_num, coun, coun_num, winr, winr_num = riot_crawler.create_features(match_list, id2number)
+        syn, syn_num, coun, coun_num, winr, winr_num, matches = riot_crawler.create_features(match_list, id2number)
         synergy_matrix += syn
         synergy_matrix_num += syn_num
         counter_matrix += coun
         counter_matrix_num += coun_num
         winratio_matrix += winr
         winratio_matrix_num += winr_num
-
+        matches_for_features.extend(matches)
     synergy = np.zeros((num_champions, num_champions))
     counter = np.zeros((num_champions, num_champions))
     winratio = np.zeros((num_champions, ))
@@ -92,14 +91,11 @@ if __name__ == '__main__':
         np.save(f, counter)
     with open('winratio.npy', 'wb') as f:
         np.save(f, winratio)
-    #creating feature vectors and target
-
+    #creating feature and target vectors
     feature_vectors = []
     target_vector = []
-    for path in load_paths:
-        match_list = riot_crawler.load_match_ids(path)
-for region in regions:
-    for match in matches_wins[region].values():
+
+    for match in matches_for_features:
         feature_vector = np.zeros((2 * num_champions + 2))
         for champion_id1, champion_id2 in zip(match[100], match[200]):
             feature_vector[id2number[champion_id1]] = 1
