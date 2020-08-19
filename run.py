@@ -27,3 +27,4 @@ if __name__ == '__main__':
     with open(recom_path, 'w') as f:
         for item in pos_picks:
             f.write('%s: %f\n' % (item[0], item[1]))
+#can be run with python run.py data/bans.txt data/champions.txt data 100
