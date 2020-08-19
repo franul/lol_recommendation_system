@@ -6,12 +6,8 @@ from ratelimit import limits, sleep_and_retry
 import csv
 import json
 import os
-
-api_key = 'RGAPI-cc723756-6fec-410f-8283-ad41083471b4'
-leagues = ['challenger', 'master']
-regions = ['NA1', 'KR', 'BR1']
-queue = "RANKED_SOLO_5x5"
-
+import numpy as np
+from itertools import combinations
 
 class Riot_Crawler():
     def __init__(self, api_key, queue, queue_id, matchlist_page_limit=100):
@@ -238,6 +234,8 @@ class Riot_Crawler():
         if os.path.exists(path):
             with open(path, 'r') as f:
                 match_list = json.load(f)
+        else:
+            match_list = []
 
         path = os.path.join(load_path, 'account_ids_unseen.txt')
         account_ids_unseen = []
@@ -321,5 +319,4 @@ class Riot_Crawler():
                     counter_matrix_num[id1, id2] += 1
                     counter_matrix[id2, id1] += teams['200score']
                     counter_matrix_num[id2, id1] += 1
-        return synergy_matrix, synergy_matrix_num, counter_matrix,
-    counter_matrix_num, winratio_matrix, winratio_matrix_num, matches
+        return synergy_matrix, synergy_matrix_num, counter_matrix, counter_matrix_num, winratio_matrix, winratio_matrix_num, matches
