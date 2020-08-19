@@ -247,7 +247,7 @@ class Riot_Crawler():
                     account_ids_unseen.append(line.strip())
         return match_list, match_id_dones, account_ids_unseen
 
-    def create_features(self, match_list, id2number):
+    def create_winratio(self, match_list, id2number):
         num_champions = len(id2number)
         synergy_matrix = np.zeros((num_champions, num_champions))
         synergy_matrix_num = np.zeros((num_champions, num_champions))
