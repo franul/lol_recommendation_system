@@ -249,6 +249,7 @@ class Riot_Crawler():
 
     def create_winratio(self, match_list, id2number):
         num_champions = len(id2number)
+        matches = []
         synergy_matrix = np.zeros((num_champions, num_champions))
         synergy_matrix_num = np.zeros((num_champions, num_champions))
         counter_matrix = np.zeros((num_champions, num_champions))
@@ -287,6 +288,7 @@ class Riot_Crawler():
                 champion_id = participant['championId']
                 teamId = participant['teamId']
                 teams[teamId].append(champion_id)
+            matches.append(teams)
             #winratio
             for champion_id1, champion_id2 in zip(teams[100], teams[200]):
                 id1 = id2number[champion_id1]
@@ -320,4 +322,4 @@ class Riot_Crawler():
                     counter_matrix[id2, id1] += teams['200score']
                     counter_matrix_num[id2, id1] += 1
         return synergy_matrix, synergy_matrix_num, counter_matrix,
-    counter_matrix_num, winratio_matrix, winratio_matrix_num
+    counter_matrix_num, winratio_matrix, winratio_matrix_num, matches
