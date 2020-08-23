@@ -156,6 +156,6 @@ class Recommendation_System:
                     example_champs_nums_t200.append(champion_num)
                     example_champs_nums_t100 = self.champs_t100_nums.copy()
                     feature_vector_recom = [create_feacture_vector(example_champs_nums_t100, example_champs_nums_t200)]
-                    recommendation_dict[self.num2champ[champion_num]] = self.model.predict_proba(feature_vector_recom)[0][0]
+                    recommendation_dict[self.num2champ[champion_num]] = self.model.predict_proba(feature_vector_recom)[0][1]
         recommendation_dict = {k: v for k, v in sorted(recommendation_dict.items(), key=lambda item: item[1], reverse=True)}
         return recommendation_dict
