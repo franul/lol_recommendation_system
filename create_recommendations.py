@@ -9,7 +9,7 @@ import pickle
 from recommendation_system import Recommendation_System
 
 
-def create_recommendations(bans_path, champion_path, output_path):
+def create_recommendations(bans, champion_dict):
     #loading champion info
     # data_path = os.path.join(os.path.dirname(os.path.abspath(os.getcwd())), 'data')
     data_path = os.path.join(os.path.abspath(os.getcwd()), 'data')
@@ -29,7 +29,7 @@ def create_recommendations(bans_path, champion_path, output_path):
         champ2id[id_name] = id_num
         id2number[id_num] = i
         number2id[i] = id_num
-    #dictonarz matching champion name with its ordinal number
+    #dictonary matching champion name with its ordinal number
     champ2num = {k: id2number[v] for k, v in champ2id.items()}
     #loading synergy, counter matrices
     path = os.path.join(data_path, 'synergy.npy')
@@ -45,52 +45,21 @@ def create_recommendations(bans_path, champion_path, output_path):
         model = pickle.load(f)
     recom_system = Recommendation_System(model, synergy, counter,
                                                   champ2num)
-    #loading champion bans and names
-    bans = []
-    with open(bans_path) as f:
-        lines = f.readlines()
-        for line in lines:
-            ban = line.strip()
-            try:
-                ban = int(ban)
-            except:
-                pass
-            bans.append(ban)
+    champions = list(champion_dict.keys())
+    teams = list(champion_dict.values())
+    #adding bans and champions to recommmendation object
+    recom_system.add_bans(bans)
+    recom_system.add_champs(champions, teams)
+    rec_dict100 = recom_system.recommend_champ(team_to_recommend=100)
+    rec_dict200 = recom_system.recommend_champ(team_to_recommend=200)
+    pos_picks100 = [(k,v) for k, v in rec_dict100.items()  if v >= 0.5]
+    pos_picks200 = [(k,v) for k, v in rec_dict200.items()  if v >= 0.5]
 
-    #loading champion bans and names
-    champions = []
-    teams = []
-    with open(champion_path) as f:
-        lines = f.readlines()
-        for line in lines:
-            line = line.strip()
-            words = line.split()
-            champion = words[0]
-            try:
-                champion = int(champion)
-            except:
-                pass
-            team = words[1]
-            try:
-                team = int(team)
-            except:
-                pass
-            champions.append(champion)
-            teams.append(team)
+    rec_dict = dict()
+    rec_dict[100] = rec_dict100
+    rec_dict[200] = rec_dict200
 
-        #adding bans and champions to recommmendation object
-        recom_system.add_bans(bans)
-        recom_system.add_champs(champions, teams)
-        rec_dict100 = recom_system.recommend_champ(team_to_recommend=100)
-        rec_dict200 = recom_system.recommend_champ(team_to_recommend=200)
-        pos_picks100 = [(k,v) for k, v in rec_dict100.items()  if v >= 0.5]
-        pos_picks200 = [(k,v) for k, v in rec_dict200.items()  if v >= 0.5]
-        
-        rec_dict = dict()
-        rec_dict[100] = rec_dict100
-        rec_dict[200] = rec_dict200
-
-        pos_picks = dict()
-        pos_picks[100] = pos_picks100
-        pos_picks[200] = pos_picks200
-        return rec_dict, pos_picks
+    pos_picks = dict()
+    pos_picks[100] = pos_picks100
+    pos_picks[200] = pos_picks200
+    return rec_dict, pos_picks
