@@ -35,5 +35,5 @@ if pos_picks[100]:
         st.write('{}: {}'.format(item[0], round(item[1], 3)))
 if pos_picks[200]:
     st.write('### Recommendations for team purple:')
-    for item in pos_picks[100]:
+    for item in pos_picks[200]:
         st.write('{}: {}'.format(item[0], round(item[1], 3)))
