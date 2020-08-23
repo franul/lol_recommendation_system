@@ -124,12 +124,11 @@ class Recommendation_System:
             feature_vector[2 * self.num_champs] = synergy_value
             feature_vector[2 * self.num_champs + 1] = counter_value
             return feature_vector
-
+        recommendation_dict = {}
         if team_to_recommend == 100 or team_to_recommend == 'blue':
             if len(self.champs_t100_nums) == 5:
                 print('Team blue has full party!')
             else:
-                recommendation_dict = {}
                 for champion_num in self.champ_list_nums:
                     if champion_num in self.bans_champs_nums:
                         continue
@@ -146,7 +145,6 @@ class Recommendation_System:
             if len(self.champs_t200_nums) == 5:
                 print('Team purple has full party!')
             else:
-                recommendation_dict = {}
                 for champion_num in self.champ_list_nums:
                     if champion_num in self.bans_champs_nums:
                         continue

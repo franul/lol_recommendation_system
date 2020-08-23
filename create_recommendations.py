@@ -9,8 +9,7 @@ import pickle
 from recommendation_system import Recommendation_System
 
 
-def create_recommendations(bans_path, champion_path, output_path,
-                           team_to_recommend):
+def create_recommendations(bans_path, champion_path, output_path):
     #loading champion info
     # data_path = os.path.join(os.path.dirname(os.path.abspath(os.getcwd())), 'data')
     data_path = os.path.join(os.path.abspath(os.getcwd()), 'data')
@@ -82,6 +81,16 @@ def create_recommendations(bans_path, champion_path, output_path,
         #adding bans and champions to recommmendation object
         recom_system.add_bans(bans)
         recom_system.add_champs(champions, teams)
-        rec_dict = recom_system.recommend_champ(team_to_recommend=team_to_recommend)
-        pos_picks = [(k,v) for k, v in rec_dict.items()  if v >= 0.5]
+        rec_dict100 = recom_system.recommend_champ(team_to_recommend=100)
+        rec_dict200 = recom_system.recommend_champ(team_to_recommend=200)
+        pos_picks100 = [(k,v) for k, v in rec_dict100.items()  if v >= 0.5]
+        pos_picks200 = [(k,v) for k, v in rec_dict200.items()  if v >= 0.5]
+        
+        rec_dict = dict()
+        rec_dict[100] = rec_dict100
+        rec_dict[200] = rec_dict200
+
+        pos_picks = dict()
+        pos_picks[100] = pos_picks100
+        pos_picks[200] = pos_picks200
         return rec_dict, pos_picks
