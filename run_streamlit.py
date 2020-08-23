@@ -18,22 +18,22 @@ if len(bans) > 10:
 team100 = st.multiselect("Choose champions for team blue:", [item for item in poss_champ_list if item not in bans])
 team200 = st.multiselect("Choose champions for team purple:", [item for item in poss_champ_list if item not in bans])
 
-if not team100 and not team200:
-    st.error("Please select at least one champion.")
-
 if len(team100) > 5:
     st.error("Team blue has more than 5 champions.")
+    st.stop()
 
 if len(team200) > 5:
     st.error("Team purple has more than 5 champions.")
+    st.stop()
 champion_list = dict(zip(team100 + team200, [100 for _ in team100] + [200 for _ in team200]))
 rec_dict, pos_picks = create_recommendations(bans, champion_list)
-
-if pos_picks[100]:
-    st.write('### Recommendations for team blue:')
-    for item in pos_picks[100]:
-        st.write('{}: {}'.format(item[0], round(item[1], 3)))
-if pos_picks[200]:
-    st.write('### Recommendations for team purple:')
-    for item in pos_picks[200]:
-        st.write('{}: {}'.format(item[0], round(item[1], 3)))
+st.write(rec_dict[100])
+st.write(rec_dict[200])
+# if pos_picks[100]:
+#     st.write('### Recommendations for team blue:')
+#     for item in pos_picks[100]:
+#         st.write('{}: {}'.format(item[0], round(item[1], 3)))
+# if pos_picks[200]:
+#     st.write('### Recommendations for team purple:')
+#     for item in pos_picks[200]:
+#         st.write('{}: {}'.format(item[0], round(item[1], 3)))
