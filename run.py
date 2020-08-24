@@ -55,15 +55,15 @@ if __name__ == '__main__':
             teams.append(team)
     champion_dict = dict(zip(champions, teams))
 
-    rec_dict, pos_picks = create_recommendations(bans, champion_dict)
+    rec_dict, pos_picks, _ = create_recommendations(bans, champion_dict)
     recom_path = output_path / 'recommendations.txt'
     with open(recom_path, 'w') as f:
         if pos_picks[100]:
             f.write('Picks for team blue')
-            for item in pos_picks[100]:
+            for item in pos_picks[100][:20]:
                 f.write('%s: %f\n' % (item[0], item[1]))
         if pos_picks[200]:
             f.write('Picks for team purple')
-            for item in pos_picks[200]:
+            for item in pos_picks[200][:20]:
                 f.write('%s: %f\n' % (item[0], item[1]))
 #can be run with python run.py data/bans.txt data/champions.txt data 100
