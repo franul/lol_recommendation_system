@@ -107,15 +107,12 @@ class Recommendation_System:
                 synergy100 += self.synergy[champion_num1, champion_num2]
             for champion_num1, champion_num2 in combinations(example_champs_nums_t200, 2):
                 synergy200 += self.synergy[champion_num1, champion_num2]
-            if len(list(combinations(example_champs_nums_t100, 2))) > 0:
-                synergy100 = synergy100 / len(list(combinations(example_champs_nums_t100, 2)))
-            if len(list(combinations(example_champs_nums_t200, 2))) > 0:
-                synergy200 = synergy200 / len(list(combinations(example_champs_nums_t200, 2)))
-            len_t100 = len(example_champs_nums_t100)
-            len_t200 = len(example_champs_nums_t200)
+            len_t100 = len(list(combinations(example_champs_nums_t100, 2)))
+            len_t200 = len(list(combinations(example_champs_nums_t200, 2)))
             if len_t100 == len_t200:
-                synergy100 /= len_t100
-                synergy200 /= len_t200
+                if len_t100 > 0:
+                    synergy100 /= len_t100
+                    synergy200 /= len_t200
             elif len_t100 > len_t200:
                 synergy100 /= len_t100
                 synergy200 += (len_t100 - len_t200) * 0.5
@@ -123,8 +120,7 @@ class Recommendation_System:
             else:
                 synergy200 /= len_t200
                 synergy100 += (len_t200 - len_t100) * 0.5
-                synergy200 /= len_t200
-            synergy_value = synergy100 - synergy200
+                synergy100 /= len_t200
             synergy_value = synergy100 - synergy200
 
             counter_value = 0
@@ -154,7 +150,7 @@ class Recommendation_System:
                     example_champs_nums_t100.append(champion_num)
                     example_champs_nums_t200 = self.champs_t200_nums.copy()
                     feature_vector_recom = [create_feacture_vector(example_champs_nums_t100, example_champs_nums_t200)]
-                    recommendation_dict[self.num2champ[champion_num]] = self.model.predict_proba(feature_vector_recom)[0][0]
+                    recommendation_dict[self.num2champ[champion_num]] = self.model.predict_proba(feature_vector_recom)[0][1]
         elif team_to_recommend == 200 or team_to_recommend == 'purple':
             if len(self.champs_t200_nums) == 5:
                 print('Team purple has full party!')
@@ -170,6 +166,6 @@ class Recommendation_System:
                     example_champs_nums_t200.append(champion_num)
                     example_champs_nums_t100 = self.champs_t100_nums.copy()
                     feature_vector_recom = [create_feacture_vector(example_champs_nums_t100, example_champs_nums_t200)]
-                    recommendation_dict[self.num2champ[champion_num]] = self.model.predict_proba(feature_vector_recom)[0][1]
+                    recommendation_dict[self.num2champ[champion_num]] = self.model.predict_proba(feature_vector_recom)[0][0]
         recommendation_dict = {k: v for k, v in sorted(recommendation_dict.items(), key=lambda item: item[1], reverse=True)}
         return recommendation_dict
