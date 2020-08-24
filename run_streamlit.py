@@ -26,14 +26,19 @@ if len(team200) > 5:
     st.error("Team purple has more than 5 champions.")
     st.stop()
 champion_list = dict(zip(team100 + team200, [100 for _ in team100] + [200 for _ in team200]))
-rec_dict, pos_picks = create_recommendations(bans, champion_list)
-st.write(rec_dict[100])
-st.write(rec_dict[200])
-# if pos_picks[100]:
-#     st.write('### Recommendations for team blue:')
-#     for item in pos_picks[100]:
-#         st.write('{}: {}'.format(item[0], round(item[1], 3)))
-# if pos_picks[200]:
-#     st.write('### Recommendations for team purple:')
-#     for item in pos_picks[200]:
-#         st.write('{}: {}'.format(item[0], round(item[1], 3)))
+rec_dict, pos_picks, prediction = create_recommendations(bans, champion_list)
+# st.write(rec_dict[100])
+# st.write(rec_dict[200])
+if len(team200) > 5 and len(team100) > 5:
+    st.write('### Prediction for current picks: ')
+    st.write('Team blue: {}'.format(round(prediction[1], 3)))
+    st.write('Team purple: {}'.format(round(prediction[0], 3)))
+
+if pos_picks[100]:
+    st.write('### Recommendations for team blue:')
+    for item in pos_picks[100][:20]:
+        st.write('{}: {}'.format(item[0], round(item[1] - prediction[1], 3)))
+if pos_picks[200]:
+    st.write('### Recommendations for team purple:')
+    for item in pos_picks[200][:20]:
+        st.write('{}: {}'.format(item[0], round(item[1] - prediction[0], 3)))
