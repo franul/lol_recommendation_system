@@ -105,7 +105,7 @@ if __name__ == '__main__':
             for champion_id2 in match[200]:
                 id2 = id2number[champion_id2]
                 counter_value += counter[id1, id2]
-        counter_value = 0.5 - (counter_value / 25)
+        counter_value = (counter_value / 25) - 0.5
         feature_vector[2 * num_champions] = synergy_value
         feature_vector[2 * num_champions + 1] = counter_value
         feature_vectors.append(feature_vector)

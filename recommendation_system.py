@@ -111,6 +111,20 @@ class Recommendation_System:
                 synergy100 = synergy100 / len(list(combinations(example_champs_nums_t100, 2)))
             if len(list(combinations(example_champs_nums_t200, 2))) > 0:
                 synergy200 = synergy200 / len(list(combinations(example_champs_nums_t200, 2)))
+            len_t100 = len(example_champs_nums_t100)
+            len_t200 = len(example_champs_nums_t200)
+            if len_t100 == len_t200:
+                synergy100 /= len_t100
+                synergy200 /= len_t200
+            elif len_t100 > len_t200:
+                synergy100 /= len_t100
+                synergy200 += (len_t100 - len_t200) * 0.5
+                synergy200 /= len_t100
+            else:
+                synergy200 /= len_t200
+                synergy100 += (len_t200 - len_t100) * 0.5
+                synergy200 /= len_t200
+            synergy_value = synergy100 - synergy200
             synergy_value = synergy100 - synergy200
 
             counter_value = 0
@@ -120,7 +134,7 @@ class Recommendation_System:
                     count_num += 1
                     counter_value += self.counter[champion_num100, champion_num200]
             if count_num > 0:
-                counter_value = 0.5 - (counter_value / count_num)
+                counter_value = (counter_value / count_num) - 0.5
             feature_vector[2 * self.num_champs] = synergy_value
             feature_vector[2 * self.num_champs + 1] = counter_value
             return feature_vector
