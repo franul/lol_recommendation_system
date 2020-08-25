@@ -29,7 +29,7 @@ champion_list = dict(zip(team100 + team200, [100 for _ in team100] + [200 for _ 
 rec_dict, pos_picks, prediction = create_recommendations(bans, champion_list)
 # st.write(rec_dict[100])
 # st.write(rec_dict[200])
-if len(team200) > 5 and len(team100) > 5:
+if len(team200) == 5 and len(team100) == 5:
     st.write('### Prediction for current picks: ')
     st.write('Team blue: {}'.format(round(prediction[1], 3)))
     st.write('Team purple: {}'.format(round(prediction[0], 3)))
