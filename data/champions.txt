@@ -1,8 +1,8 @@
-Zoe 100
-Teemo 100
-MasterYi 100
-Ziggs 100
-Viktor 200
-Nasus 200
-Caitlyn 200
-Morgana 200
+Warwick 100
+Shen 100
+Lux 100
+Ashe 100
+Jhin 200
+Sylas 200
+Bard 200
+Darius 200

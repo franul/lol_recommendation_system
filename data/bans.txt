@@ -1,9 +1,8 @@
-Aatrox
-Akali
-Darius
-Ekko
-Illaoi
-Kassadin
-Lillia
-Pyke
+Mordekaiser
+Katarina
+Yasuo
+Caitlyn
+Yuumi
 Sona
+Akali
+Evelynn
