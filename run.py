@@ -8,7 +8,6 @@ if __name__ == '__main__':
     bans_path = Path(argv[1])
     champion_path = Path(argv[2])
     output_path = Path(argv[3])
-    team_to_recommend = int(argv[4])
 
 
     if not bans_path.exists():
@@ -59,11 +58,11 @@ if __name__ == '__main__':
     recom_path = output_path / 'recommendations.txt'
     with open(recom_path, 'w') as f:
         if pos_picks[100]:
-            f.write('Picks for team blue')
+            f.write('Picks for team blue: \n')
             for item in pos_picks[100][:20]:
                 f.write('%s: %f\n' % (item[0], item[1]))
         if pos_picks[200]:
-            f.write('Picks for team purple')
+            f.write('Picks for team purple: \n')
             for item in pos_picks[200][:20]:
                 f.write('%s: %f\n' % (item[0], item[1]))
-#can be run with python run.py data/bans.txt data/champions.txt data 100
+#can be run with python run.py data/bans.txt data/champions.txt data
