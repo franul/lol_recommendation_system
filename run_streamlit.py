@@ -31,14 +31,24 @@ rec_dict, pos_picks, prediction = create_recommendations(bans, champion_list)
 # st.write(rec_dict[200])
 if len(team200) == 5 and len(team100) == 5:
     st.write('### Prediction for current picks: ')
-    st.write('Team blue: {}'.format(round(prediction[1], 3)))
-    st.write('Team purple: {}'.format(round(prediction[0], 3)))
+    st.write('Team blue: {}'.format(str(round(100 * prediction[1], 2))) + '%')
+    st.write('Team purple: {}'.format(str(round(100 * prediction[0], 2))) + '%')
 
 if pos_picks[100]:
     st.write('### Recommendations for team blue:')
     for item in pos_picks[100][:20]:
-        st.write('{}: {}'.format(item[0], round(item[1] - prediction[1], 3)))
+        percentage = round(100 * (item[1] - prediction[1]), 2)
+        if percentage > 0:
+            percentage = '+' + str(percentage) + '%'
+        else:
+            percentage = str(percentage) + '%'
+        st.write('{}: {}'.format(item[0], percentage))
 if pos_picks[200]:
     st.write('### Recommendations for team purple:')
     for item in pos_picks[200][:20]:
-        st.write('{}: {}'.format(item[0], round(item[1] - prediction[0], 3)))
+        percentage = round(100 * (item[1] - prediction[0]), 2)
+        if percentage > 0:
+            percentage = '+' + str(percentage) + '%'
+        else:
+            percentage = str(percentage) + '%'
+        st.write('{}: {}'.format(item[0], percentage))
