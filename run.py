@@ -61,6 +61,7 @@ if __name__ == '__main__':
             f.write('Picks for team blue: \n')
             for item in pos_picks[100][:20]:
                 f.write('%s: %f\n' % (item[0], item[1]))
+        f.write('\n')
         if pos_picks[200]:
             f.write('Picks for team purple: \n')
             for item in pos_picks[200][:20]:
