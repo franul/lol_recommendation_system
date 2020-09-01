@@ -15,5 +15,13 @@ and run program with:
 ```
 streamlit run run_streamlit.py
 ```
+System on streamlit site should look like this:
+![](http://g.recordit.co/IjfpxcA59s.gif)
 
-System should look like this:
+Another way you could run this program is to edit bans, picks in textfile files in data directory and then run python script:
+```
+python run.py data/bans.txt data/champions.txt data
+```
+Recommendations.txt should contain your output.
+
+
