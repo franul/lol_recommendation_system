@@ -4,16 +4,16 @@ LoL recommendation system is a Python program which helps League of Legends (LoL
 
 ## Installation
 To install simply clone github repository with:
-'''
+```
 git clone https://github.com/franul/lol_recommendation_system.git
-'''
+```
 To run program got to repository location, install required packages with:
-'''
+```
 pip install -r requirements.txt
-'''
+```
 and run program with:
-'''
+```
 streamlit run run_streamlit.py
-'''
+```
 
 System should look like this:
