@@ -16,7 +16,7 @@ and run program with:
 streamlit run run_streamlit.py
 ```
 System on streamlit site should look like this:
-<img align="right" src="http://g.recordit.co/IjfpxcA59s.gif" width="300" height="800" />
+<img align="right" src="http://g.recordit.co/IjfpxcA59s.gif" width="500" height="1000" />
 
 Another way you could run this program is to edit bans, picks in textfile files in data directory and then run python script:
 ```
