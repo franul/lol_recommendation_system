@@ -66,4 +66,3 @@ if __name__ == '__main__':
             f.write('Picks for team purple: \n')
             for item in pos_picks[200][:20]:
                 f.write('%s: %f\n' % (item[0], item[1]))
-#can be run with python run.py data/bans.txt data/champions.txt data
