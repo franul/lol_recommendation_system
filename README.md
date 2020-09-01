@@ -16,7 +16,7 @@ and run program with:
 streamlit run run_streamlit.py
 ```
 System on streamlit site should look like this:
-![](http://g.recordit.co/IjfpxcA59s.gif width="100" height="400" )
+![xxx](http://g.recordit.co/IjfpxcA59s.gif)
 
 Another way you could run this program is to edit bans, picks in textfile files in data directory and then run python script:
 ```
