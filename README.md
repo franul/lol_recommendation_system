@@ -21,7 +21,7 @@ System on streamlit site should look like this:
   <img src="http://g.recordit.co/IjfpxcA59s.gif"]>
 </p>
 
-Another way you could run this program is to edit bans, picks in textfile files in data directory and then run python script:
+Another way you could run this program is to edit bans and picks via textfiles in data directory and then run python script:
 ```
 python run.py data/bans.txt data/champions.txt data
 ```
